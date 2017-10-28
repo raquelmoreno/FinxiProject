@@ -7,19 +7,25 @@
 </ion-header>
 
 <ion-content padding>
-  <h2>Controle de Mesas</h2>
-  
-  <div class="spacer" style="width: 300px; height: 30px;"></div>
-  <button ion-button>
-       Ocupação de Mesa
-  </button>
-  <div class="spacer" style="width: 300px; height: 30px;"></div>
-  <button ion-button>
-       Fazer Pedido
-  </button>
-  <div class="spacer" style="width: 300px; height: 30px;"></div>
-  <button ion-button>
-       Fechar Conta
-  </button>
-  
- </ion-content>
+  <div class="spacer" style="width: 300px; height: 100px;"></div>
+  <ion-card class="cards-list-h">
+    <ion-card-header>
+      Controle de Mesas
+    </ion-card-header>
+    <ion-card-content >
+        <ion-list class="cards-list">
+        
+          <button ion-item (click)="goToPage('OcupaMesasPage')">
+            >Ocupação de Mesa
+          </button>
+
+          <button ion-item (click)="goToPage('FazerPedidoPage')">
+            >Fazer Pedido
+          </button>
+          <button ion-item (click)="goToPage('FecharContaPage')">
+            >Fechar Conta
+          </button>
+        </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

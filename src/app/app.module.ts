@@ -6,6 +6,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { FazerPedidoPageModule } from '../pages/fazer-pedido/fazer-pedido.module';
+import { FecharContaPageModule } from '../pages/fechar-conta/fechar-conta.module';
+import { OcupaMesasPageModule } from '../pages/ocupa-mesas/ocupa-mesas.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +17,10 @@ import { HomePage } from '../pages/home/home';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    FazerPedidoPageModule,
+    FecharContaPageModule,
+    OcupaMesasPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
