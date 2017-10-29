@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 
 /**
@@ -16,7 +17,8 @@ import { HomePage } from '../home/home';
 })
 export class OcupaMesasPage {
 
-  public selected:string;
+  public selected: string;
+  index:number;
 
   items = [
     "Mesa 1",
@@ -25,7 +27,7 @@ export class OcupaMesasPage {
     "Mesa 4"
   ]
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -34,14 +36,20 @@ export class OcupaMesasPage {
 
   goToPage() {
     this.navCtrl.setRoot(HomePage);
- }
+  }
 
- itemSelected(item:string){
-   this.selected = item.trim();
- }
+  itemSelected(item: string) {
+    this.selected = item.trim();
+    this.index = this.items.indexOf(this.selected);
+  }
 
- ocupar(){
-   console.log(this.selected+ " ocupada");
-   this.goToPage();
- }
+  ocupar() {
+    let alert = this.alertCtrl.create({
+      title: 'Ocupação de Mesa',
+      subTitle: this.selected + ' ocupada',
+      buttons: ['OK']
+    });
+    alert.present();
+    this.goToPage();
+  }
 }
