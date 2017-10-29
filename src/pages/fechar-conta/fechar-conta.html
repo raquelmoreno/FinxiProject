@@ -15,12 +15,16 @@
 
 <ion-content padding>
   <div id="fecharConta-markdown7" class="show-list-numbers-and-dots">
+    <button ion-button color="light" (click)="goToPage()">Voltar</button>
+    <div class="spacer" style="width: 300px; height: 100px;"></div>
     <p style="color:#000000;font-size:20px;">Mesa:</p>
   </div>
-  <form id="fecharConta-form6" class="list">
-    <label class="item item-input" id="fecharConta-input6" name="mesa">
-      <input type="text" placeholder="Numero da Mesa">
-    </label>
-  </form>
-  <a ui-sref="menu()" id="fecharConta-button8" class="button button-positive button-block">Fechar Conta</a>
+  <ion-list>
+
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="nmesa" placeholder="Numero da Mesa"></ion-input>
+    </ion-item>
+
+  </ion-list>
+  <button ion-button color="dark" (click)="submiting(nmesa)">Fechar Conta</button>
 </ion-content>
