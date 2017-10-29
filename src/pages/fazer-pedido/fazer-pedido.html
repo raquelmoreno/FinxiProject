@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>FazerPedido</ion-title>
+    <ion-title>Fazer Pedido</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,28 +15,28 @@
 
 <ion-content padding>
   <div id="fazerPedido-markdown3" class="show-list-numbers-and-dots">
-    <p style="color:#000000;font-size:20px;">Mesa:</p>
+    <button ion-button color="light" (click)="goToPage()">Voltar</button>
+    <div class="spacer" style="width: 300px; height: 100px;"></div>
   </div>
-  <form id="fazerPedido-form3" class="list">
-    <label class="item item-input" id="fazerPedido-input5" name="mesa">
-      <input type="text" placeholder="mesa">
-    </label>
-  </form>
-  <div id="fazerPedido-markdown4" class="show-list-numbers-and-dots">
-    <p style="color:#000000;font-size:20px;">Item:</p>
-  </div>
-  <form id="fazerPedido-form4" class="list">
-    <label class="item item-select" id="fazerPedido-select1" name="itemPed">
-      <span class="input-label"></span>
-      <select>
-        <option>Itens</option>
-        <option>Coca-Cola</option>
-        <option>Cerveja</option>
-        <option>Couvert</option>
-        <option>Tabua de Frios</option>
-      </select>
-    </label>
-  </form>
-  <a ui-sref="menu()" id="fazerPedido-button5" class="button button-positive button-block">Pedir</a>
-  <div class="spacer" style="width: 300px; height: 10px;"></div>
+  <ion-list inset>
+    <ion-item>
+      <ion-label>
+        <p style="color:#000000;font-size:20px;">Mesa:</p>
+      </ion-label>
+      <ion-input type="text" [(ngModel)]="mesa" placeholder="Numero da Mesa"></ion-input>
+    </ion-item>
+    <div class="spacer" style="width: 300px; height: 30px;"></div>
+    <ion-list>
+      <ion-item>
+        <ion-label>Itens</ion-label>
+        <ion-select [(ngModel)]="pedido" (ionChange)="pedido.item">
+          <ion-option *ngFor="let item of items">
+            {{item}}
+          </ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </ion-list>
+  <div class="spacer" style="width: 300px; height: 60px;"></div>
+  <button ion-button color="dark" (click)="submiting(mesa,pedido)">Fazer Pedido</button>
 </ion-content>
