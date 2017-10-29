@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the FecharContaPage page.
@@ -15,11 +17,24 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class FecharContaPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,public alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FecharContaPage');
   }
+
+  goToPage() {
+    this.navCtrl.setRoot(HomePage);
+ }
+
+ submiting(mesa:string){
+  let alert = this.alertCtrl.create({
+    title: 'Fechamento de Conta',
+    subTitle: "Conta fechada. Mesa "+ mesa + " desocupada",
+    buttons: ['OK']
+  });
+  alert.present();
+ }
 
 }
