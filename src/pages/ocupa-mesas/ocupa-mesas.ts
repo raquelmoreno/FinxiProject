@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { AlertController } from 'ionic-angular';
+import { MesasProvider, Mesas } from '../../providers/mesas/mesas'
 
 /**
  * Generated class for the OcupaMesasPage page.
@@ -17,35 +18,48 @@ import { AlertController } from 'ionic-angular';
 })
 export class OcupaMesasPage {
 
-   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
+  mesas: Mesas[] = [];
+  items: any[] = [];
+  occupationdefault: false;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private mesasProvider: MesasProvider) {
   }
-  
+
+  ionViewDidEnter() {
+    this.getAllMesas();
+  }
+
+  getAllMesas() {
+    this.mesasProvider.getAll(this.occupationdefault)
+      .then((result: any[]) => {
+        this.mesas = result;
+      });
+      this.extractingMesas(this.mesas);
+  }
+
+  extractingMesas(mesas:any){
+    let i: number;
+    for(i=0;i<mesas.lengh;i++){
+      this.items[i] = mesas[i].getDescription();
+    }
+  }
+
   public selected: string;
-  index:number;
+  index: number;
 
-  items = [
-    "Mesa 1",
-    "Mesa 2",
-    "Mesa 3",
-    "Mesa 4"
-  ]
-
-  
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad OcupaMesasPage');
-  }
 
   goToPage() {
     this.navCtrl.setRoot(HomePage);
   }
 
-   itemSelected(item: string) {
+  itemSelected(item: string) {
     this.selected = item.trim();
-    this.index = this.items.indexOf(this.selected);
+   // this.index = this.mesas.indexOf(this.selected);
   }
 
   ocupar() {
+    this.mesas.splice(this.index, 1);
+
     let alert = this.alertCtrl.create({
       title: 'Ocupação de Mesa',
       subTitle: this.selected + ' ocupada',

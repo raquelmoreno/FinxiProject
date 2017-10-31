@@ -6,9 +6,14 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { SQLite } from '@ionic-native/sqlite'
 import { FazerPedidoPageModule } from '../pages/fazer-pedido/fazer-pedido.module';
 import { FecharContaPageModule } from '../pages/fechar-conta/fechar-conta.module';
 import { OcupaMesasPageModule } from '../pages/ocupa-mesas/ocupa-mesas.module';
+import { DatabaseProvider } from '../providers/database/database';
+import { MesasProvider } from '../providers/mesas/mesas';
+import { CardapioProvider } from '../providers/cardapio/cardapio';
+import { PedidosProvider } from '../providers/pedidos/pedidos';
 
 @NgModule({
   declarations: [
@@ -21,10 +26,6 @@ import { OcupaMesasPageModule } from '../pages/ocupa-mesas/ocupa-mesas.module';
     FazerPedidoPageModule,
     FecharContaPageModule,
     OcupaMesasPageModule,
-    IonicStorageModule.forRoot({
-      name: '__mydb',
-         driverOrder: ['indexeddb', 'sqlite', 'websql']
-    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -34,7 +35,12 @@ import { OcupaMesasPageModule } from '../pages/ocupa-mesas/ocupa-mesas.module';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    SQLite,
+    DatabaseProvider,
+    MesasProvider,
+    CardapioProvider,
+    PedidosProvider
   ]
 })
-export class AppModule {}
+export class AppModule { }
