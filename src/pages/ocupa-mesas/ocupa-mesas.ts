@@ -18,10 +18,8 @@ import { MesasProvider, Mesas } from '../../providers/mesas/mesas'
 })
 export class OcupaMesasPage {
 
-  mesas: Mesas[] = [];
-  items: string[] = [];
+  mesasDip: Mesas[][];
   occupationdefault: false;
-  conv: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private mesasProvider: MesasProvider) {
   }
@@ -34,31 +32,19 @@ export class OcupaMesasPage {
     this.mesasProvider.getAll(this.occupationdefault)
       .then((result: Mesas[]) => {
         //Para transformar Objeto em Array pra não dar erro do NgFor
-        this.conv = result.map(function (obj) {
+        this.mesasDip = result.map(function (obj) {
           return Object.keys(obj).map(function (chave) {
             return obj[chave];
           });
         });
-        
-        let alert = this.alertCtrl.create({
-          title: 'Ocupação de Mesa',
-          subTitle: this.conv + ' / ',
-          buttons: ['OK']
-        });
-        alert.present();
-        // this.mesas = result;
+
       });
-    //this.extractingMesas(this.mesas);
+
   }
 
-  extractingMesas(mesas: Mesas[]) {
-    let i: number;
-    for (i = 0; i < mesas.length; i++) {
-      this.items[i] = mesas[i].getDescription();
-    }
-  }
-
+  //Descrição da mesa selecionada
   public selected: string;
+  //Id da mesa selecionada
   index: number;
 
 
@@ -67,26 +53,40 @@ export class OcupaMesasPage {
   }
 
   itemSelected(item: any) {
-    // this.selected = item.trim();
+
+    this.selected = (item.toString()).trim();
+
     let alert = this.alertCtrl.create({
       title: 'Ocupação de Mesa',
-      subTitle: item + ' ',
+      subTitle: this.selected + ' Selecionada',
       buttons: ['OK']
     });
     alert.present();
 
-    // this.index = this.mesas.indexOf(this.selected);
+    this.mesasProvider.get(this.selected)
+      .then((result: Mesas) => {
+        this.index = result.id;
+      });
+
   }
 
   ocupar() {
-    this.mesas.splice(this.index, 1);
+    let escolhida = new Mesas();
+    escolhida.id = this.index;
+    escolhida.description = this.selected;
+    escolhida.occupation = true;
 
-    let alert = this.alertCtrl.create({
-      title: 'Ocupação de Mesa',
-      subTitle: this.selected + ' ocupada',
-      buttons: ['OK']
-    });
-    alert.present();
+    this.mesasProvider.update(escolhida)
+      .then((result: Mesas) => {
+        let alert = this.alertCtrl.create({
+          title: 'Ocupação de Mesa',
+          subTitle: this.selected + ' ocupada',
+          buttons: ['OK']
+        });
+        alert.present();
+      });
+
+
     this.goToPage();
   }
 }

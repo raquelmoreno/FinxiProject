@@ -24,8 +24,8 @@
     <ion-item>
       <ion-label>Mesas</ion-label>
       <ion-select [(ngModel)]="mesas" (ionChange)="itemSelected(mesas)">
-        <ion-option *ngFor="let item of conv">
-          {{item}}
+        <ion-option *ngFor="let item of mesasDip">
+          {{item[1]}}
         </ion-option>
       </ion-select>
     </ion-item>
