@@ -6,7 +6,7 @@ import { AlertController } from 'ionic-angular';
 @Injectable()
 export class DatabaseProvider {
 
-  constructor(private sqlite: SQLite,public alertCtrl: AlertController) { }
+  constructor(private sqlite: SQLite, public alertCtrl: AlertController) { }
 
   /**
   * Cria um banco caso não exista ou pega um banco existente com o nome no parametro
@@ -31,8 +31,20 @@ export class DatabaseProvider {
         // Inserindo dados padrão
         this.insertDefaultItems(db);
 
+        // this.dropTables(db);
       })
       .catch(e => console.log(e));
+  }
+
+  private dropTables(db: SQLiteObject) {
+    // Criando as tabelas
+    db.sqlBatch([
+      ['DROP TABLE mesas'],
+      ['DROP TABLE cardapio'],
+      ['DROP TABLE pedidos'],
+    ])
+      .then(() => console.log('Tabelas deletadas'))
+      .catch(e => console.error('Erro ao deletar as tabelas', e));
   }
 
   /**
@@ -43,8 +55,8 @@ export class DatabaseProvider {
     // Criando as tabelas
     db.sqlBatch([
       ['CREATE TABLE IF NOT EXISTS mesas (id integer primary key AUTOINCREMENT NOT NULL, description TEXT, occupation integer)'],
-      ['CREATE TABLE IF NOT EXISTS cardapio (id integer primary key AUTOINCREMENT NOT NULL, description TEXT'],
-      ['CREATE TABLE IF NOT EXISTS pedidos (id integer primary key AUTOINCREMENT NOT NULL, mesa integer not null, item integer not null, foreign key (mesa) references mesas(id),foreign key (item) references cardapio(id)'],
+      ['CREATE TABLE IF NOT EXISTS cardapio (id integer primary key AUTOINCREMENT NOT NULL, description TEXT)'],
+      ['CREATE TABLE IF NOT EXISTS pedidos (id integer primary key AUTOINCREMENT NOT NULL, mesa integer not null, item integer not null, foreign key (mesa) references mesas(id),foreign key (item) references cardapio(id))'],
     ])
       .then(() => console.log('Tabelas criadas'))
       .catch(e => console.error('Erro ao criar as tabelas', e));
@@ -62,10 +74,10 @@ export class DatabaseProvider {
 
           // Criando as tabelas
           db.sqlBatch([
-            ['insert into mesas (description,occupation) values (?,?)', ['Mesa 1',0]],
-            ['insert into mesas (description,occupation) values (?,?)', ['Mesa 2',0]],
-            ['insert into mesas (description,occupation) values (?,?)', ['Mesa 3',0]],
-            ['insert into mesas (description,occupation) values (?,?)', ['Mesa 4',0]]
+            ['insert into mesas (description,occupation) values (?,?)', [['Mesa 1'], 0]],
+            ['insert into mesas (description,occupation) values (?,?)', [['Mesa 2'], 0]],
+            ['insert into mesas (description,occupation) values (?,?)', [['Mesa 3'], 0]],
+            ['insert into mesas (description,occupation) values (?,?)', [['Mesa 4'], 0]]
           ])
             .then(() => console.log('Dados padrões incluídos'))
             .catch(e => console.error('Erro ao incluir dados padrões', e));

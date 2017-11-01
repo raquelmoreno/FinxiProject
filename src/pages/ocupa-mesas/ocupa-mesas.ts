@@ -19,8 +19,9 @@ import { MesasProvider, Mesas } from '../../providers/mesas/mesas'
 export class OcupaMesasPage {
 
   mesas: Mesas[] = [];
-  items: any[] = [];
+  items: string[] = [];
   occupationdefault: false;
+  conv: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private mesasProvider: MesasProvider) {
   }
@@ -31,15 +32,28 @@ export class OcupaMesasPage {
 
   getAllMesas() {
     this.mesasProvider.getAll(this.occupationdefault)
-      .then((result: any[]) => {
-        this.mesas = result;
+      .then((result: Mesas[]) => {
+        //Para transformar Objeto em Array pra não dar erro do NgFor
+        this.conv = result.map(function (obj) {
+          return Object.keys(obj).map(function (chave) {
+            return obj[chave];
+          });
+        });
+        
+        let alert = this.alertCtrl.create({
+          title: 'Ocupação de Mesa',
+          subTitle: this.conv + ' / ',
+          buttons: ['OK']
+        });
+        alert.present();
+        // this.mesas = result;
       });
-      this.extractingMesas(this.mesas);
+    //this.extractingMesas(this.mesas);
   }
 
-  extractingMesas(mesas:any){
+  extractingMesas(mesas: Mesas[]) {
     let i: number;
-    for(i=0;i<mesas.lengh;i++){
+    for (i = 0; i < mesas.length; i++) {
       this.items[i] = mesas[i].getDescription();
     }
   }
@@ -52,9 +66,16 @@ export class OcupaMesasPage {
     this.navCtrl.setRoot(HomePage);
   }
 
-  itemSelected(item: string) {
-    this.selected = item.trim();
-   // this.index = this.mesas.indexOf(this.selected);
+  itemSelected(item: any) {
+    // this.selected = item.trim();
+    let alert = this.alertCtrl.create({
+      title: 'Ocupação de Mesa',
+      subTitle: item + ' ',
+      buttons: ['OK']
+    });
+    alert.present();
+
+    // this.index = this.mesas.indexOf(this.selected);
   }
 
   ocupar() {
