@@ -31,22 +31,41 @@ export class FecharContaPage {
 
   submiting(mesa: string) {
     let nmesa = parseInt(mesa);
-
-    let escolhida = new Mesas();
-    escolhida.id = nmesa;
-    escolhida.description = 'Mesa ' + nmesa;
-    escolhida.occupation = false;
-
-    this.mesasProvider.update(escolhida)
-      .then((result: Mesas) => {
-        let alert = this.alertCtrl.create({
-          title: 'Fechamento de Conta',
-          subTitle: "Conta fechada. Mesa " + nmesa + " desocupada",
-          buttons: ['OK']
-        });
-        alert.present();
+    if (mesa == undefined) {
+      let alert = this.alertCtrl.create({
+        title: 'Fechamento de Conta',
+        subTitle: "Insira o numero da mesa a ser desocupada",
+        buttons: ['OK']
       });
+      alert.present();
+    } else {
+      var aux = "Mesa " + nmesa;
+      this.mesasProvider.get(aux)
+        .then((result: Mesas) => {
+          if (result.occupation == false) {
+            let alert2 = this.alertCtrl.create({
+              title: 'Fechamento de Conta',
+              subTitle: "Esta mesa não está ocupada",
+              buttons: ['OK']
+            });
+            alert2.present();
+          } else {
+            result.occupation = false;
 
-      this.goToPage();
+            this.mesasProvider.update(result)
+              .then((result: Mesas) => {
+                let alert3 = this.alertCtrl.create({
+                  title: 'Fechamento de Conta',
+                  subTitle: "Conta fechada. Mesa " + nmesa + " desocupada",
+                  buttons: ['OK']
+                });
+                alert3.present();
+              });
+
+          }
+        });
+    }
+
+    this.goToPage();
   }
 }

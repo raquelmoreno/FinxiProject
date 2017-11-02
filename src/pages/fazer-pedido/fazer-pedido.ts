@@ -4,6 +4,7 @@ import { AlertController } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { CardapioProvider, Cardapio } from '../../providers/cardapio/cardapio'
 import { PedidosProvider, Pedido } from '../../providers/pedidos/pedidos'
+import { MesasProvider, Mesas } from '../../providers/mesas/mesas'
 
 /**
  * Generated class for the FazerPedidoPage page.
@@ -20,7 +21,7 @@ import { PedidosProvider, Pedido } from '../../providers/pedidos/pedidos'
 export class FazerPedidoPage {
 
   public mesa: number;
-   //Descrição da item selecionado
+  //Descrição da item selecionado
   public pedido: string;
 
   //Id do item selecionado
@@ -28,9 +29,11 @@ export class FazerPedidoPage {
 
   items: Cardapio[][];
 
+  Ok: boolean = true;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private CardapioProvider: CardapioProvider, private PedidosProvider: PedidosProvider) {
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private CardapioProvider: CardapioProvider, private PedidosProvider: PedidosProvider, private mesasProvider: MesasProvider) {
   }
 
   ionViewDidLoad() {
@@ -69,13 +72,68 @@ export class FazerPedidoPage {
 
   }
 
+  setFalse() {
+    this.Ok = false;
+  }
 
 
   submiting(mesa: number, qtde: number) {
 
-    this.PedidosProvider.insert(mesa,this.index,qtde);
-    this.mesa = mesa;
+    if (mesa == undefined) {
+      this.setFalse();
+      let alert = this.alertCtrl.create({
+        title: 'Falha ao fazer pedido',
+        subTitle: "Insira o numero da mesa para o pedido",
+        buttons: ['OK']
+      });
+      alert.present();
+    } else {
+      var aux = "Mesa " + mesa;
+      this.mesasProvider.get(aux)
+        .then((result: Mesas) => {
+          if (result == null) {
+            this.setFalse();
+            let alert1 = this.alertCtrl.create({
+              title: 'Falha ao fazer pedido',
+              subTitle: "Esta mesa não existe",
+              buttons: ['OK']
+            });
+            alert1.present();
+            this.goToPage();
+          }
+          if (result.occupation == false) {
+            this.setFalse();
+            let alert2 = this.alertCtrl.create({
+              title: 'Falha ao fazer pedido',
+              subTitle: "Esta mesa não está ocupada",
+              buttons: ['OK']
+            });
+            alert2.present();
+            this.goToPage();
+          }
+        })
+    }
+    if (qtde == undefined) {
+      this.setFalse();
+      let alert3 = this.alertCtrl.create({
+        title: 'Falha ao fazer pedido',
+        subTitle: "Insira a quantidade do pedido",
+        buttons: ['OK']
+      });
+      alert3.present();
+      this.goToPage();
+    }
+   
+    if (this.Ok) {
+      this.fazerPedido(mesa, qtde);
+    }
 
+  }
+
+
+  private fazerPedido(mesa: number, qtde: number) {
+    this.PedidosProvider.insert(mesa, this.index, qtde);
+    this.mesa = mesa;
     let alert = this.alertCtrl.create({
       title: 'Confirmação',
       subTitle: 'Pedido Feito! ' + 'Mesa: ' + this.mesa + ' Pedido: ' + this.pedido + ' Qtde: ' + qtde,
@@ -83,6 +141,4 @@ export class FazerPedidoPage {
     });
     alert.present();
   }
-
-
 }

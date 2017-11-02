@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { DatabaseProvider } from '../database/database';
-import { AlertController } from 'ionic-angular';
 
 /*
   Generated class for the CardapioProvider provider.
@@ -12,7 +11,7 @@ import { AlertController } from 'ionic-angular';
 @Injectable()
 export class CardapioProvider {
 
-  constructor(private dbProvider: DatabaseProvider, public alertCtrl: AlertController) { }
+  constructor(private dbProvider: DatabaseProvider) { }
 
   public get(description: string) {
     return this.dbProvider.getDB()

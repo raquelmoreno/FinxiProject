@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { AlertController } from 'ionic-angular';
+
 
 
 @Injectable()
 export class DatabaseProvider {
 
-  constructor(private sqlite: SQLite, public alertCtrl: AlertController) { }
+  constructor(private sqlite: SQLite) { }
 
   /**
   * Cria um banco caso não exista ou pega um banco existente com o nome no parametro
@@ -31,7 +31,7 @@ export class DatabaseProvider {
         // Inserindo dados padrão
         this.insertDefaultItems(db);
 
-         //this.dropTables(db);
+        // this.dropTables(db);
       })
       .catch(e => console.log(e));
   }

@@ -26,17 +26,22 @@ export class PedidosProvider {
         ])
           .then(() => {
             console.log('Pedido incluído')
-            sucess = true;
             let alert = this.alertCtrl.create({
               title: 'Inclusao de Pedido',
               subTitle: 'Pedido incluido',
               buttons: ['OK']
             });
             alert.present();
-            return sucess
 
           })
-          .catch(e => console.error('Erro ao incluir pedido', e));
+          .catch(e =>{ console.error('Erro ao incluir pedido', e)
+          let alert = this.alertCtrl.create({
+            title: 'Inclusao de Pedido',
+            subTitle: 'Falha ao incluir pedido',
+            buttons: ['OK']
+          });
+          alert.present();
+        });
 
       })
       .catch((e) => console.error(e));
