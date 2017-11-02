@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { HomePage } from '../home/home';
+import { CardapioProvider, Cardapio } from '../../providers/cardapio/cardapio'
+import { PedidosProvider, Pedido } from '../../providers/pedidos/pedidos'
 
 /**
  * Generated class for the FazerPedidoPage page.
@@ -17,42 +19,70 @@ import { HomePage } from '../home/home';
 })
 export class FazerPedidoPage {
 
- public mesa:number;
- public pedido:string;
+  public mesa: number;
+   //Descrição da item selecionado
+  public pedido: string;
 
-  items=[
-    "Coca-Cola",
-    "Cerveja",
-    "Couvert",
-    "Tabua de Frios"
-  ];
+  //Id do item selecionado
+  index: number;
 
-  
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
+  items: Cardapio[][];
+
+
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private CardapioProvider: CardapioProvider, private PedidosProvider: PedidosProvider) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad FazerPedidoPage');
+    this.getAllItens();
   }
 
   goToPage() {
     this.navCtrl.setRoot(HomePage);
   }
 
-  
+  getAllItens() {
+    this.CardapioProvider.getAll()
+      .then((result: Cardapio[]) => {
+        //Para transformar Objeto em Array pra não dar erro do NgFor
+        this.items = result.map(function (obj) {
+          return Object.keys(obj).map(function (chave) {
+            return obj[chave];
+          });
+        });
 
-  submiting(mesa:number,pedido:string) {
-   
+      });
+
+  }
+
+  itemSelected(item: any) {
+
+    this.pedido = (item.toString()).trim();
+
+
+    this.CardapioProvider.get(this.pedido)
+      .then((result: Cardapio) => {
+        this.index = result.id;
+      });
+
+
+
+  }
+
+
+
+  submiting(mesa: number, qtde: number) {
+
+    this.PedidosProvider.insert(mesa,this.index,qtde);
     this.mesa = mesa;
-    this.pedido = pedido.trim();
-    console.log('Mesa: '+ this.mesa + ' Pedido: ' + this.pedido);
+
     let alert = this.alertCtrl.create({
       title: 'Confirmação',
-      subTitle: "Pedido Feito",
+      subTitle: 'Pedido Feito! ' + 'Mesa: ' + this.mesa + ' Pedido: ' + this.pedido + ' Qtde: ' + qtde,
       buttons: ['OK']
     });
     alert.present();
   }
- 
+
 
 }

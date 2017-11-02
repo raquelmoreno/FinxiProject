@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { DatabaseProvider } from '../database/database';
+import { AlertController } from 'ionic-angular';
 
 /*
   Generated class for the PedidosProvider provider.
@@ -11,8 +12,43 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class PedidosProvider {
 
-  constructor(public http: Http) {
-    console.log('Hello PedidosProvider Provider');
+  constructor(private dbProvider: DatabaseProvider, public alertCtrl: AlertController) { }
+
+  public insert(nmesa: number, item: number, qtde: number) {
+    var sucess = false;
+
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+
+        // Criando as tabelas
+        db.sqlBatch([
+          ['insert into pedidos (mesa,item,qtde) values (?,?,?)', [nmesa, item, qtde]]
+        ])
+          .then(() => {
+            console.log('Pedido incluído')
+            sucess = true;
+            let alert = this.alertCtrl.create({
+              title: 'Inclusao de Pedido',
+              subTitle: 'Pedido incluido',
+              buttons: ['OK']
+            });
+            alert.present();
+            return sucess
+
+          })
+          .catch(e => console.error('Erro ao incluir pedido', e));
+
+      })
+      .catch((e) => console.error(e));
   }
+
+
+}
+
+
+export class Pedido {
+  id: number;
+  mesa: number;
+  item: number;
 
 }

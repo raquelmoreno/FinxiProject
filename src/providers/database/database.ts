@@ -31,7 +31,7 @@ export class DatabaseProvider {
         // Inserindo dados padrão
         this.insertDefaultItems(db);
 
-        // this.dropTables(db);
+         //this.dropTables(db);
       })
       .catch(e => console.log(e));
   }
@@ -56,7 +56,7 @@ export class DatabaseProvider {
     db.sqlBatch([
       ['CREATE TABLE IF NOT EXISTS mesas (id integer primary key AUTOINCREMENT NOT NULL, description TEXT, occupation integer)'],
       ['CREATE TABLE IF NOT EXISTS cardapio (id integer primary key AUTOINCREMENT NOT NULL, description TEXT)'],
-      ['CREATE TABLE IF NOT EXISTS pedidos (id integer primary key AUTOINCREMENT NOT NULL, mesa integer not null, item integer not null, foreign key (mesa) references mesas(id),foreign key (item) references cardapio(id))'],
+      ['CREATE TABLE IF NOT EXISTS pedidos (id integer primary key AUTOINCREMENT NOT NULL, mesa integer not null, item integer not null, qtde integer not null, foreign key (mesa) references mesas(id),foreign key (item) references cardapio(id))'],
     ])
       .then(() => console.log('Tabelas criadas'))
       .catch(e => console.error('Erro ao criar as tabelas', e));
@@ -79,8 +79,8 @@ export class DatabaseProvider {
             ['insert into mesas (description,occupation) values (?,?)', [['Mesa 3'], 0]],
             ['insert into mesas (description,occupation) values (?,?)', [['Mesa 4'], 0]]
           ])
-            .then(() => console.log('Dados padrões incluídos'))
-            .catch(e => console.error('Erro ao incluir dados padrões', e));
+            .then(() => console.log('Dados padrões da mesa incluídos'))
+            .catch(e => console.error('Erro ao incluir dados padrões das mesas', e));
 
         }
       })
@@ -99,8 +99,8 @@ export class DatabaseProvider {
             ['insert into cardapio (description) values (?)', ['Couvert']],
             ['insert into cardapio (description) values (?)', ['Tabua de Frios']]
           ])
-            .then(() => console.log('Dados padrões incluídos'))
-            .catch(e => console.error('Erro ao incluir dados padrões', e));
+            .then(() => console.log('Dados padrões do cardapio incluídos'))
+            .catch(e => console.error('Erro ao incluir dados padrões do cardapio', e));
 
         }
       })

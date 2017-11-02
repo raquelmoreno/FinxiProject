@@ -29,14 +29,20 @@
     <ion-list>
       <ion-item>
         <ion-label>Itens</ion-label>
-        <ion-select [(ngModel)]="pedido" (ionChange)="pedido.item">
+        <ion-select [(ngModel)]="pedido" (ionChange)="itemSelected(pedido)">
           <ion-option *ngFor="let item of items">
-            {{item}}
+            {{item[1]}}
           </ion-option>
         </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p style="color:#000000;font-size:20px;">Quantidade:</p>
+        </ion-label>
+        <ion-input type="text" [(ngModel)]="qtde" placeholder="Quantidade desejada"></ion-input>
       </ion-item>
     </ion-list>
   </ion-list>
   <div class="spacer" style="width: 300px; height: 60px;"></div>
-  <button ion-button color="dark" (click)="submiting(mesa,pedido)">Fazer Pedido</button>
+  <button ion-button color="dark" (click)="submiting(mesa,qtde)">Fazer Pedido</button>
 </ion-content>

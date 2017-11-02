@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { DatabaseProvider } from '../database/database';
+import { AlertController } from 'ionic-angular';
 
 /*
   Generated class for the CardapioProvider provider.
@@ -11,8 +12,60 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class CardapioProvider {
 
-  constructor(public http: Http) {
-    console.log('Hello CardapioProvider Provider');
+  constructor(private dbProvider: DatabaseProvider, public alertCtrl: AlertController) { }
+
+  public get(description: string) {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+        let sql = 'select * from cardapio where description = ?';
+        let data = [description];
+
+        return db.executeSql(sql, data)
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let item = data.rows.item(0);
+              let cardapio = new Cardapio();
+              cardapio.id = item.id;
+              cardapio.description = item.description;
+
+
+              return cardapio;
+            }
+
+            return null;
+          })
+          .catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
   }
+
+  public getAll() {
+    return this.dbProvider.getDB()
+      .then((db: SQLiteObject) => {
+
+        return db.executeSql('SELECT id,description FROM cardapio', [])
+          .then((data: any) => {
+            if (data.rows.length > 0) {
+              let items: Cardapio[] = [];
+              for (var i = 0; i < data.rows.length; i++) {
+                var cardapio = data.rows.item(i);
+                items.push(cardapio);
+              }
+              return items;
+            } else {
+              return [];
+            }
+          })
+          .catch((e) => console.error(e))
+      })
+      .catch((e) => console.error(e));
+  }
+
+}
+
+
+export class Cardapio {
+  id: number;
+  description: string;
 
 }
